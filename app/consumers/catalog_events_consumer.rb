@@ -10,7 +10,7 @@ class CatalogEventsConsumer < ApplicationConsumer
   private
 
   def process_message(message)
-    payload = JSON.parse(message.payload)
+    payload = message.payload.is_a?(String) ? JSON.parse(message.payload) : message.payload
     return unless payload.fetch("event_type") == "product.created"
 
     validate_product_created_event!(payload)
