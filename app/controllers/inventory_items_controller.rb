@@ -1,5 +1,3 @@
-require "securerandom"
-
 class InventoryItemsController < ApplicationController
   before_action :set_inventory_item, only: %i[show edit update]
 
@@ -39,31 +37,9 @@ class InventoryItemsController < ApplicationController
 
     InventoryItem.transaction do
       saved = @inventory_item.save
-      create_stock_updated_event if saved && stock_changed
+      InventoryStockUpdatedEvent.create!(@inventory_item) if saved && stock_changed
     end
 
     saved
-  end
-
-  def create_stock_updated_event
-    event_id = SecureRandom.uuid
-
-    OutboxEvent.create!(
-      event_id: event_id,
-      event_type: "inventory.stock_updated",
-      aggregate_type: "InventoryItem",
-      aggregate_id: @inventory_item.id,
-      payload: {
-        event_id: event_id,
-        event_type: "inventory.stock_updated",
-        event_version: 1,
-        source: "kafky_storage",
-        occurred_at: Time.current.iso8601,
-        data: {
-          sku: @inventory_item.product_sku,
-          available_quantity: @inventory_item.available_quantity
-        }
-      }
-    )
   end
 end
