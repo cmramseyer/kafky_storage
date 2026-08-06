@@ -24,6 +24,15 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <%= link_to "Kafky Storage", inventory_items_path, class: "site-name" %>
+    </header>
+
+    <main class="page">
+      <% flash.each do |type, message| %>
+        <p class="flash <%= type %>"><%= message %></p>
+      <% end %>
+      <%= yield %>
+    </main>
   </body>
 </html>

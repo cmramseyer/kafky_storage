@@ -1,0 +1,11 @@
+<% content_for :title, "Edit #{@inventory_item.product_sku}" %>
+
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Stock operations</p>
+    <h1>Edit inventory</h1>
+  </div>
+  <%= link_to "Back", @inventory_item, class: "button secondary" %>
+</section>
+
+<%= render "form", inventory_item: @inventory_item %>

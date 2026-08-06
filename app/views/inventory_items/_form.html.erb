@@ -1,0 +1,37 @@
+<%= form_with model: inventory_item, class: "inventory-form" do |form| %>
+  <% if inventory_item.errors.any? %>
+    <section class="errors" aria-labelledby="error-heading">
+      <h2 id="error-heading"><%= pluralize(inventory_item.errors.count, "error") %> prevented this item from being saved:</h2>
+      <ul>
+        <% inventory_item.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <dl class="item-identity">
+    <div>
+      <dt>SKU</dt>
+      <dd><%= inventory_item.product_sku %></dd>
+    </div>
+    <div>
+      <dt>Description</dt>
+      <dd><%= inventory_item.item_desc %></dd>
+    </div>
+  </dl>
+
+  <div class="field">
+    <%= form.label :available_quantity, "Available quantity" %>
+    <%= form.number_field :available_quantity, min: 0, step: 1, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :reorder_point, "Reorder point" %>
+    <%= form.number_field :reorder_point, min: 0, step: 1, required: true %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Update inventory" %>
+  </div>
+<% end %>

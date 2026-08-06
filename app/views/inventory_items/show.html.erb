@@ -1,0 +1,27 @@
+<% content_for :title, @inventory_item.product_sku %>
+
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Inventory item</p>
+    <h1><%= @inventory_item.item_desc %></h1>
+  </div>
+  <div class="header-actions">
+    <%= link_to "Edit", edit_inventory_item_path(@inventory_item), class: "button" %>
+    <%= link_to "Back", inventory_items_path, class: "button secondary" %>
+  </div>
+</section>
+
+<dl class="item-details">
+  <div>
+    <dt>SKU</dt>
+    <dd><%= @inventory_item.product_sku %></dd>
+  </div>
+  <div>
+    <dt>Available quantity</dt>
+    <dd><%= @inventory_item.available_quantity %></dd>
+  </div>
+  <div>
+    <dt>Reorder point</dt>
+    <dd><%= @inventory_item.reorder_point %></dd>
+  </div>
+</dl>
