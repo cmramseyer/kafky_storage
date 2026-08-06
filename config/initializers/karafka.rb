@@ -1,6 +1,7 @@
 require "karafka"
 require_dependency Rails.root.join("app/consumers/application_consumer").to_s
 require_dependency Rails.root.join("app/consumers/catalog_events_consumer").to_s
+require_dependency Rails.root.join("app/consumers/inventory_receipts_events_consumer").to_s
 require_dependency Rails.root.join("app/consumers/orders_events_consumer").to_s
 
 class KarafkaApp < Karafka::App
@@ -20,6 +21,10 @@ class KarafkaApp < Karafka::App
 
       topic "orders.events" do
         consumer OrdersEventsConsumer
+      end
+
+      topic "inventory.receipts.events" do
+        consumer InventoryReceiptsEventsConsumer
       end
     end
   end
