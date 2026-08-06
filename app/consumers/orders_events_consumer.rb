@@ -28,8 +28,13 @@ class OrdersEventsConsumer < ApplicationConsumer
       return unless inventory_item
       return if quantity > inventory_item.available_quantity
 
-      inventory_item.update!(available_quantity: inventory_item.available_quantity - quantity)
+      stock_before = inventory_item.available_quantity
+      stock_after = stock_before - quantity
+
+      inventory_item.update!(available_quantity: stock_after)
       InventoryStockUpdatedEvent.create!(inventory_item)
+      InventoryLowStockEvent.create!(inventory_item) if stock_before > inventory_item.reorder_point &&
+                                                       stock_after <= inventory_item.reorder_point
     end
   end
 
