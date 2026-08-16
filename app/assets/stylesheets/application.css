@@ -41,4 +41,31 @@ dd { margin: 0.35rem 0 0; }
 .empty-state { padding: 2rem; text-align: center; }
 .flash { background: #dcfce7; border: 1px solid #86efac; color: #166534; margin: 0 0 1.5rem; padding: 0.75rem; }
 .sr-only { height: 1px; margin: -1px; overflow: hidden; position: absolute; width: 1px; }
+
+@keyframes inventory-item-created {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: #bbf7d0; }
+}
+
+@keyframes inventory-quantity-decreased {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: #fecaca; }
+}
+
+@keyframes inventory-quantity-increased {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: #bbf7d0; }
+}
+
+.inventory-item-created td { animation: inventory-item-created 1.5s ease-in-out 2; }
+.inventory-quantity-update { border-radius: 0.25rem; display: inline-block; min-width: 1.5rem; padding: 0.1rem 0.25rem; }
+.inventory-quantity-update--decreased { animation: inventory-quantity-decreased 5s ease-in-out 2; }
+.inventory-quantity-update--increased { animation: inventory-quantity-increased 5s ease-in-out 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .inventory-item-created td { animation: inventory-item-created 3s ease-in-out; }
+  .inventory-quantity-update--decreased { animation: inventory-quantity-decreased 10s ease-in-out; }
+  .inventory-quantity-update--increased { animation: inventory-quantity-increased 10s ease-in-out; }
+}
+
 @media (max-width: 600px) { .page-header, .row-actions { align-items: flex-start; flex-direction: column; } th:nth-child(4), td:nth-child(4) { display: none; } }

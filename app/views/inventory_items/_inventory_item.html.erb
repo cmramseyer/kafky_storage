@@ -1,0 +1,14 @@
+<tr id="<%= dom_id(inventory_item) %>" class="<%= "inventory-item-created" if inventory_item.id == highlight_inventory_item_id %>">
+  <td><%= inventory_item.product_sku %></td>
+  <td><%= inventory_item.item_desc %></td>
+  <td>
+    <span id="<%= dom_id(inventory_item, :available_quantity) %>">
+      <%= render "inventory_items/available_quantity", inventory_item: inventory_item %>
+    </span>
+  </td>
+  <td><%= inventory_item.reorder_point %></td>
+  <td class="row-actions">
+    <%= link_to "View", inventory_item %>
+    <%= link_to "Edit", edit_inventory_item_path(inventory_item) %>
+  </td>
+</tr>

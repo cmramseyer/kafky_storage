@@ -16,9 +16,10 @@ class CatalogEventsConsumer < ApplicationConsumer
     validate_product_created_event!(payload)
     data = payload.fetch("data")
 
-    InventoryItem.find_or_create_by!(product_sku: data.fetch("sku")) do |item|
+    inventory_item = InventoryItem.find_or_create_by!(product_sku: data.fetch("sku")) do |item|
       item.item_desc = data.fetch("product_desc")
     end
+    InventoryItemBroadcaster.created(inventory_item) if inventory_item.previously_new_record?
   end
 
   def validate_product_created_event!(payload)

@@ -1,5 +1,7 @@
 <% content_for :title, "Inventory" %>
 
+<%= turbo_stream_from "inventory_items" %>
+
 <section class="page-header">
   <div>
     <p class="eyebrow">Stock operations</p>
@@ -7,37 +9,6 @@
   </div>
 </section>
 
-<% if @inventory_items.any? %>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>SKU</th>
-          <th>Description</th>
-          <th>Available</th>
-          <th>Reorder point</th>
-          <th><span class="sr-only">Actions</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @inventory_items.each do |inventory_item| %>
-          <tr>
-            <td><%= inventory_item.product_sku %></td>
-            <td><%= inventory_item.item_desc %></td>
-            <td><%= inventory_item.available_quantity %></td>
-            <td><%= inventory_item.reorder_point %></td>
-            <td class="row-actions">
-              <%= link_to "View", inventory_item %>
-              <%= link_to "Edit", edit_inventory_item_path(inventory_item) %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <section class="empty-state">
-    <h2>No inventory items yet</h2>
-    <p>Items will appear when kafky_prices publishes product.created events.</p>
-  </section>
-<% end %>
+<div id="inventory_items">
+  <%= render "inventory_items/inventory_list", inventory_items: @inventory_items %>
+</div>

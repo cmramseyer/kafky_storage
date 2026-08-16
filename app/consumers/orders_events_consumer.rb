@@ -23,10 +23,10 @@ class OrdersEventsConsumer < ApplicationConsumer
     quantity = product_payload.fetch("quantity").to_i
     return unless quantity.positive?
 
-    InventoryItem.transaction do
+    inventory_item = InventoryItem.transaction do
       inventory_item = InventoryItem.lock.find_by(product_sku: sku)
-      return unless inventory_item
-      return if quantity > inventory_item.available_quantity
+      next unless inventory_item
+      next if quantity > inventory_item.available_quantity
 
       stock_before = inventory_item.available_quantity
       stock_after = stock_before - quantity
@@ -35,7 +35,10 @@ class OrdersEventsConsumer < ApplicationConsumer
       InventoryStockUpdatedEvent.create!(inventory_item)
       InventoryLowStockEvent.create!(inventory_item) if stock_before > inventory_item.reorder_point &&
                                                        stock_after <= inventory_item.reorder_point
+      inventory_item
     end
+
+    InventoryItemBroadcaster.available_quantity_changed(inventory_item, direction: "decreased") if inventory_item
   end
 
   def validate_order_created_event!(payload)

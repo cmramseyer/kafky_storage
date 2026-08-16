@@ -19,11 +19,13 @@ class InventoryReceiptsEventsConsumer < ApplicationConsumer
 
     data.fetch("provider_order_id")
 
-    InventoryItem.transaction do
+    inventory_item = InventoryItem.transaction do
       inventory_item = InventoryItem.lock.find_by!(product_sku: data.fetch("sku"))
       inventory_item.update!(available_quantity: inventory_item.available_quantity + quantity)
       InventoryStockUpdatedEvent.create!(inventory_item)
+      inventory_item
     end
+    InventoryItemBroadcaster.available_quantity_changed(inventory_item, direction: "increased")
   end
 
   def validate_stock_added_event!(payload)

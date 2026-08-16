@@ -1,0 +1,25 @@
+<% highlight_inventory_item_id = local_assigns[:highlight_inventory_item_id] %>
+
+<% if inventory_items.any? %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Description</th>
+          <th>Available</th>
+          <th>Reorder point</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "inventory_items/inventory_item", collection: inventory_items, as: :inventory_item, locals: { highlight_inventory_item_id: highlight_inventory_item_id } %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <section class="empty-state">
+    <h2>No inventory items yet</h2>
+    <p>Items will appear when kafky_prices publishes product.created events.</p>
+  </section>
+<% end %>
